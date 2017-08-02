@@ -4,8 +4,9 @@ set -e
 
 BUILD_DIR=$1
 
-LIBXMLSEC1_FILE_NAME="libxmlsec1_1.2.24-4_amd64.deb"
-LIBXMLSEC1_DOWNLOAD_URL="http://ftp.us.debian.org/debian/pool/main/x/xmlsec1/${LIBXMLSEC1_FILE_NAME}"
+LIBXMLSEC1_FILE_NAME="xmlsec1-1.2.24.tar.gz"
+LIBXMLSEC1_FILE_DIR="xmlsec1-1.2.24"
+LIBXMLSEC1_DOWNLOAD_URL="http://www.aleksey.com/xmlsec/download/${LIBXMLSEC1_FILE_NAME}"
 
 # LIBXMLSEC1_DEV_FILE_NAME="libxmlsec1-dev_1.2.24-4_amd64.deb"
 # LIBXMLSEC1_DEV_DOWNLOAD_URL="http://ftp.us.debian.org/debian/pool/main/x/xmlsec1/${LIBXMLSEC1_DEV_FILE_NAME}"
@@ -15,13 +16,18 @@ INSTALL_PATH="${BUILD_DIR}/vendor/xmlsec1"
 mkdir -p $INSTALL_PATH
 
 # Download libxmlsec1
-echo "-----> Fetching ${LIBXMLSEC1_FILE_NAME}"
+echo "-----> Fetching ${LIBXMLSEC1_DOWNLOAD_URL}"
 
 LIBXMLSEC1_FILE_PATH="${BUILD_DIR}/${LIBXMLSEC1_FILE_NAME}"
 curl -s -L -o $LIBXMLSEC1_FILE_PATH $LIBXMLSEC1_DOWNLOAD_URL
 
 echo "-----> Installing ${LIBXMLSEC1_FILE_PATH}"
-dpkg -i $LIBXMLSEC1_FILE_PATH --instdir $INSTALL_PATH
+gunzip -c $LIBXMLSEC1_FILE_NAME | tar xvf -
+
+cd $LIBXMLSEC1_FILE_DIR
+./configure
+make
+make install
 
 echo "-----> Removing ${LIBXMLSEC1_FILE_PATH}"
 rm $LIBXMLSEC1_FILE_PATH
