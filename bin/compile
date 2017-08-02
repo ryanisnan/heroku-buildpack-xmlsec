@@ -8,20 +8,20 @@ LIBXMLSEC1="xmlsec1-1.2.24"
 LIBXMLSEC1_FILE_NAME="${LIBXMLSEC1}.tar.gz"
 LIBXMLSEC1_DOWNLOAD_URL="http://www.aleksey.com/xmlsec/download/${LIBXMLSEC1_FILE_NAME}"
 
+# Setup the location where we will install this stuff
+INSTALL_PATH="${BUILD_DIR}/vendor/libxmlsec1"
+mkdir -p $INSTALL_PATH
+
 # Download libxmlsec1
 echo "-----> Fetching ${LIBXMLSEC1_DOWNLOAD_URL}"
 
-LIBXMLSEC1_FILE_PATH="${BUILD_DIR}/${LIBXMLSEC1_FILE_NAME}"
+LIBXMLSEC1_FILE_PATH="${INSTALL_PATH}/${LIBXMLSEC1_FILE_NAME}"
 curl -s -L -o $LIBXMLSEC1_FILE_PATH $LIBXMLSEC1_DOWNLOAD_URL
 
 echo "-----> Installing ${LIBXMLSEC1_FILE_PATH}"
 
-# Setup the location where we will install this stuff
-INSTALL_PATH="/app/.vendor/xmlsec1"
-mkdir -p $INSTALL_PATH
-
 # Unzip the file we downloaded
-cd $BUILD_DIR
+cd $INSTALL_PATH
 gunzip -c $LIBXMLSEC1_FILE_NAME | tar xvf -
 
 # Compile the library
