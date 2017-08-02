@@ -4,16 +4,9 @@ set -e
 
 BUILD_DIR=$1
 
-LIBXMLSEC1_FILE_NAME="xmlsec1-1.2.24.tar.gz"
-LIBXMLSEC1_FILE_DIR="xmlsec1-1.2.24"
+LIBXMLSEC1="xmlsec1-1.2.24"
+LIBXMLSEC1_FILE_NAME="${LIBXMLSEC1}.tar.gz"
 LIBXMLSEC1_DOWNLOAD_URL="http://www.aleksey.com/xmlsec/download/${LIBXMLSEC1_FILE_NAME}"
-
-# LIBXMLSEC1_DEV_FILE_NAME="libxmlsec1-dev_1.2.24-4_amd64.deb"
-# LIBXMLSEC1_DEV_DOWNLOAD_URL="http://ftp.us.debian.org/debian/pool/main/x/xmlsec1/${LIBXMLSEC1_DEV_FILE_NAME}"
-
-# Setup the location where we will install this stuff
-INSTALL_PATH="${BUILD_DIR}/vendor/xmlsec1"
-mkdir -p $INSTALL_PATH
 
 # Download libxmlsec1
 echo "-----> Fetching ${LIBXMLSEC1_DOWNLOAD_URL}"
@@ -23,10 +16,16 @@ curl -s -L -o $LIBXMLSEC1_FILE_PATH $LIBXMLSEC1_DOWNLOAD_URL
 
 echo "-----> Installing ${LIBXMLSEC1_FILE_PATH}"
 
+# Setup the location where we will install this stuff
+INSTALL_PATH="/app/vendor/xmlsec1"
+mkdir -p $INSTALL_PATH
+
+# Unzip the file we downloaded
 cd $BUILD_DIR
 gunzip -c $LIBXMLSEC1_FILE_NAME | tar xvf -
 
-cd $LIBXMLSEC1_FILE_DIR
+# Compile the library
+cd $LIBXMLSEC1
 ./configure --prefix=$INSTALL_PATH
 make
 make install
