@@ -1,0 +1,47 @@
+#!/usr/bin/env bash
+
+set -e
+
+BUILD_DIR=$1
+
+LIBXMLSEC1_FILE_NAME="libxmlsec1_1.2.24-4_amd64.deb"
+LIBXMLSEC1_DOWNLOAD_URL="http://ftp.us.debian.org/debian/pool/main/x/xmlsec1/${LIBXMLSEC1_FILE_NAME}"
+
+# LIBXMLSEC1_DEV_FILE_NAME="libxmlsec1-dev_1.2.24-4_amd64.deb"
+# LIBXMLSEC1_DEV_DOWNLOAD_URL="http://ftp.us.debian.org/debian/pool/main/x/xmlsec1/${LIBXMLSEC1_DEV_FILE_NAME}"
+
+# Setup the location where we will install this stuff
+INSTALL_PATH="${BUILD_DIR}/vendor/xmlsec1"
+mkdir -p $INSTALL_PATH
+
+# Download libxmlsec1
+echo "-----> Fetching ${LIBXMLSEC1_FILE_NAME}"
+
+LIBXMLSEC1_FILE_PATH="${BUILD_DIR}/${LIBXMLSEC1_FILE_NAME}"
+curl -s -L -o $LIBXMLSEC1_FILE_PATH $LIBXMLSEC1_DOWNLOAD_URL
+
+echo "-----> Installing ${LIBXMLSEC1_FILE_PATH}"
+dpkg -i $LIBXMLSEC1_FILE_PATH --instdir $INSTALL_PATH
+
+echo "-----> Removing ${LIBXMLSEC1_FILE_PATH}"
+rm $LIBXMLSEC1_FILE_PATH
+
+# # export path
+#
+# echo "-----> Exporting path"
+#
+# PROFILE_PATH="$BUILD_DIR/.profile.d/xmlsec1.sh"
+# mkdir -p $(dirname $PROFILE_PATH)
+# echo 'export PATH="$PATH:vendor/xmlsec1/bin"' >> $PROFILE_PATH
+# echo 'export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:vendor/xmlsec1/lib"' >> $PROFILE_PATH
+#
+# # export xmlsec loc and flags
+#
+# echo "-----> Exporting flags"
+#
+# export LIBXMLSEC1=${INSTALL_PATH}
+# export CFLAGS="-I${INSTALL_PATH}/include/xmlsec1"
+#
+# # finish
+#
+# echo "-----> Installed xmlsec1"
