@@ -27,7 +27,7 @@ cd $BUILD_DIR
 gunzip -c $LIBXMLSEC1_FILE_NAME | tar xvf -
 
 cd $LIBXMLSEC1_FILE_DIR
-./configure
+./configure --prefix=$INSTALL_PATH
 make
 make install
 
